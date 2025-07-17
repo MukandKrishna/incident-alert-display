@@ -21,6 +21,7 @@ import {
   BarChart3
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Camera {
   id: string;
@@ -41,6 +42,7 @@ interface Alert {
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const [cameras, setCameras] = useState<Camera[]>([
     { id: "1", name: "Main Entrance", ip: "192.168.1.101", status: "online", location: "Building A" },
     { id: "2", name: "Parking Lot", ip: "192.168.1.102", status: "online", location: "Parking" },
@@ -77,6 +79,7 @@ const Dashboard = () => {
   const [newCamera, setNewCamera] = useState({ name: "", ip: "", location: "" });
 
   const handleLogout = () => {
+    logout();
     navigate("/login");
   };
 
@@ -116,10 +119,15 @@ const Dashboard = () => {
             <Shield className="h-8 w-8 text-primary" />
             <h1 className="text-xl font-bold text-foreground">Critical Event Detection System</h1>
           </div>
-          <Button variant="outline" onClick={handleLogout}>
-            <LogOut className="h-4 w-4 mr-2" />
-            Logout
-          </Button>
+          <div className="flex items-center space-x-4">
+            <div className="text-sm text-muted-foreground">
+              Welcome, <span className="font-medium text-foreground">{user?.name}</span>
+            </div>
+            <Button variant="outline" onClick={handleLogout}>
+              <LogOut className="h-4 w-4 mr-2" />
+              Logout
+            </Button>
+          </div>
         </div>
       </header>
 
